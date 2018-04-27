@@ -16,6 +16,7 @@ namespace Assessment
 
         public IConfiguration Configuration { get; }
         
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
@@ -28,6 +29,7 @@ namespace Assessment
             services.AddSingleton<IBoardRepository>(new BoardRepository());
         }
         
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -42,7 +44,7 @@ namespace Assessment
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseMvc(routes =>
+            app.UseMvc(routes =>    
             {
                 routes.MapRoute(
                     name: "default",

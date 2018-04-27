@@ -19,12 +19,9 @@ namespace Assessment.Web.Models
     {
         private List<Board> boards;
 
-        public BoardRepository()
-        {
-            boards = GetBoardsFromFile();
-        }
+    public BoardRepository() => boards = GetBoardsFromFile();
 
-        private List<Board> GetBoardsFromFile()
+    private List<Board> GetBoardsFromFile()
         {
             var filePath = Application.Configuration["DataFile"];
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(Directory.GetCurrentDirectory(), filePath);

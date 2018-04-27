@@ -14,18 +14,12 @@ namespace Assessment.Web.Controllers
     {
         public IBoardRepository boards;
 
-        public BoardsController(IBoardRepository boards)
-        {
-            this.boards = boards;
-        }
+    public BoardsController(IBoardRepository boards) => this.boards = boards;
 
-        [HttpGet]
-        public IEnumerable<Board> GetAll()
-        {
-            return boards.GetAll();
-        }
+    [HttpGet]
+    public IEnumerable<Board> GetAll() => boards.GetAll();
 
-        [HttpGet("{id}")]
+    [HttpGet("{id}")]
         public Board Find(int id)
         {
             if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "Board ID must be greater than zero.");
