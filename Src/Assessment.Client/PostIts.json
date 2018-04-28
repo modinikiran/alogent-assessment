@@ -1,17 +1,20 @@
 [
   {
     "Id": 1,
+    "PostName": "Post #1",
     "CreatedAt": "2018-04-20T22:37:55.1685246-04:00",
-    "Name": "Board #1"
+    "PostInfo": "This is Post item 1"
   },
   {
     "Id": 2,
+    "PostName": "Post #2",
     "CreatedAt": "2018-04-25T22:37:55.1723168-04:00",
-    "Name": "Board #2"
+    "PostInfo": "This is Post item 2"
   },
   {
     "Id": 3,
+    "PostName": "Post #3",
     "CreatedAt": "2018-04-26T22:37:55.1723189-04:00",
-    "Name": "Board #3"
+    "PostInfo": "This is Post item 3"
   }
 ]

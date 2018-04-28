@@ -1,6 +1,7 @@
 using Assessment.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +27,10 @@ namespace Assessment
                 configuration.RootPath = "ClientApp/dist";
             });
 
+            // send same Boards info. to the client all the time.
             services.AddSingleton<IBoardRepository>(new BoardRepository());
-        }
+            services.AddSingleton<IPostItRepository>(new PostItRepository());
+    }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -42,6 +45,7 @@ namespace Assessment
             }
 
             app.UseStaticFiles();
+
             app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>    

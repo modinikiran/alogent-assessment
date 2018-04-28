@@ -14,11 +14,13 @@ namespace Assessment.Web.Controllers
     {
         public IBoardRepository boards;
 
-    public BoardsController(IBoardRepository boards) => this.boards = boards;
+        public BoardsController(IBoardRepository boards) => this.boards = boards;
 
+    // GET: api/boards
     [HttpGet]
-    public IEnumerable<Board> GetAll() => boards.GetAll();
+        public IEnumerable<Board> GetAll() => boards.GetAll();
 
+    // GET: api/boards/2
     [HttpGet("{id}")]
         public Board Find(int id)
         {
@@ -26,5 +28,20 @@ namespace Assessment.Web.Controllers
 
             return boards.Find(id);
         }
+
+    // PUT api/boards/3
+    [HttpPost]
+        public bool Add(Board value)
+        {
+            // add null check
+            return boards.Add(value);
+        }
+
+    // DELETE api/boards/4
+    [HttpDelete]
+        public bool Delete(Board value)
+        {
+            return boards.Delete(value);
+        }   
     }
 }

@@ -19,11 +19,12 @@ namespace Assessment.Web.Models
     {
         private List<Board> boards;
 
-    public BoardRepository() => boards = GetBoardsFromFile();
+        public BoardRepository() => boards = GetBoardsFromFile();
 
-    private List<Board> GetBoardsFromFile()
+        // Return deserialized Boards.json data, of type List
+        private List<Board> GetBoardsFromFile()
         {
-            var filePath = Application.Configuration["DataFile"];
+            var filePath = Application.Configuration["BoardsDataFile"];
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
             var json = System.IO.File.ReadAllText(filePath);
@@ -31,16 +32,19 @@ namespace Assessment.Web.Models
             return JsonConvert.DeserializeObject<List<Board>>(json);
         }
 
+        // Get all boards with all data from boards List
         public IQueryable<Board> GetAll()
         {
             return boards.AsQueryable();
         }
 
+        // Get single board data based on it's Id
         public Board Find(int id)
         {
             return boards.FirstOrDefault(x => x.Id == id);
         }
 
+        // Add a new board to the boards list
         public bool Add(Board board)
         {
             if (Find(board.Id) != null) return false;
@@ -50,9 +54,11 @@ namespace Assessment.Web.Models
             return true;
         }
 
+        // Delete an existing board from the list
         public bool Delete(Board board)
         {
-            if (Find(board.Id) == null) return false;
+            board = Find(board.Id);
+            if (board == null) return false;
             return boards.Remove(board);
         }
     }
