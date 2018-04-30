@@ -9,15 +9,14 @@ namespace Assessment.Web.Models
 {
     public interface IBoardRepository
     {
-        IQueryable<Board> GetAll();
-        Board Find(int id);
-        bool Add(Board board);
-        bool Delete(Board board);
+        IQueryable<Board> GetAllBoards();
+        Board FindBoard(int id);
+        bool AddBoard(Board board);
+        bool DeleteBoard(Board board);
     }
-
     public class BoardRepository : IBoardRepository
     {
-        private List<Board> boards;
+        public static List<Board> boards;
 
         public BoardRepository() => boards = GetBoardsFromFile();
 
@@ -33,21 +32,21 @@ namespace Assessment.Web.Models
         }
 
         // Get all boards with all data from boards List
-        public IQueryable<Board> GetAll()
+        public IQueryable<Board> GetAllBoards()
         {
             return boards.AsQueryable();
         }
 
         // Get single board data based on it's Id
-        public Board Find(int id)
+        public Board FindBoard(int id)
         {
-            return boards.FirstOrDefault(x => x.Id == id);
+            return boards.FirstOrDefault(x => x.BoardId == id);
         }
 
         // Add a new board to the boards list
-        public bool Add(Board board)
+        public bool AddBoard(Board board)
         {
-            if (Find(board.Id) != null) return false;
+            if (FindBoard(board.BoardId) != null) return false;
 
             boards.Add(board);
 
@@ -55,9 +54,9 @@ namespace Assessment.Web.Models
         }
 
         // Delete an existing board from the list
-        public bool Delete(Board board)
+        public bool DeleteBoard(Board board)
         {
-            board = Find(board.Id);
+            board = FindBoard(board.BoardId);
             if (board == null) return false;
             return boards.Remove(board);
         }

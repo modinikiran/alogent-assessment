@@ -23,9 +23,9 @@ namespace Assessment.Web.Tests
             var boardRepo = new Mock<IBoardRepository>();
             var controller = new BoardsController(boardRepo.Object);
 
-            controller.GetAll();
+            controller.GetAllBoards();
 
-            boardRepo.Verify(x => x.GetAll(), Times.Once);
+            boardRepo.Verify(x => x.GetAllBoards(), Times.Once);
         }
 
         [Test]
@@ -54,13 +54,13 @@ namespace Assessment.Web.Tests
         public void Find_ValidId_DoesLookupThroughRepository()
         {
             var boardRepo = new Mock<IBoardRepository>();
-            boardRepo.Setup(x => x.Find(It.IsAny<int>())).Returns(new Board());
+            boardRepo.Setup(x => x.FindBoard(It.IsAny<int>())).Returns(new Board());
 
             var controller = new BoardsController(boardRepo.Object);
 
             controller.Find(1);
 
-            boardRepo.Verify(x => x.Find(1), Times.Once);
+            boardRepo.Verify(x => x.FindBoard(1), Times.Once);
         }
     }
 }

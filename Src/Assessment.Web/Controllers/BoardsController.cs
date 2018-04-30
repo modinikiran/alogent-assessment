@@ -18,30 +18,37 @@ namespace Assessment.Web.Controllers
 
     // GET: api/boards
     [HttpGet]
-        public IEnumerable<Board> GetAll() => boards.GetAll();
+        public IActionResult GetAllBoards()
+        {
+        return Ok(boards.GetAllBoards());
+        }
 
     // GET: api/boards/2
     [HttpGet("{id}")]
-        public Board Find(int id)
+        public IActionResult Find(int id)
         {
-            if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id), "Board ID must be greater than zero.");
+            if(id <= 0) return BadRequest("Please check the Board Id");
 
-            return boards.Find(id);
+            var board = boards.FindBoard(id);
+            if (board == null) return NotFound("Request failed, please check Board Id");
+            return Ok(board);
         }
 
-    // PUT api/boards/3
+    // Post api/boards/3
     [HttpPost]
-        public bool Add(Board value)
+        public IActionResult Add(Board value)
         {
-            // add null check
-            return boards.Add(value);
+            boards.AddBoard(value);
+            return Created(new Uri("api/boards", UriKind.Relative), new{BoardId = value.BoardId});
+            // return Created(boards.AddBoard(value));
         }
 
     // DELETE api/boards/4
     [HttpDelete]
-        public bool Delete(Board value)
+        public IActionResult Delete(Board value)
         {
-            return boards.Delete(value);
+            if (value.BoardId <= 0) return BadRequest();
+            return Ok(boards.DeleteBoard(value));
         }   
     }
 }

@@ -1,20 +1,23 @@
 [
   {
     "Id": 1,
-    "PostName": "Post #1",
-    "CreatedAt": "2018-04-20T22:37:55.1685246-04:00",
-    "PostInfo": "This is Post item 1"
+    "PostName": "PostIt #1",
+    "CreatedAt": "2018-04-22T18:40:31.1468823-04:00",
+    "PostInfo": "This is Post item 1",
+    "Board": null
   },
   {
     "Id": 2,
-    "PostName": "Post #2",
-    "CreatedAt": "2018-04-25T22:37:55.1723168-04:00",
-    "PostInfo": "This is Post item 2"
+    "PostName": "PostIt #2",
+    "CreatedAt": "2018-04-27T18:40:31.1473558-04:00",
+    "PostInfo": "This is Post item 2",
+    "Board": null
   },
   {
     "Id": 3,
-    "PostName": "Post #3",
-    "CreatedAt": "2018-04-26T22:37:55.1723189-04:00",
-    "PostInfo": "This is Post item 3"
+    "PostName": "PostIt #3",
+    "CreatedAt": "2018-04-28T18:40:31.1473582-04:00",
+    "PostInfo": "This is Post item 3",
+    "Board": null
   }
 ]

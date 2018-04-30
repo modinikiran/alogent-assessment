@@ -21,23 +21,45 @@ namespace Assessment
 
     private static void InitializeData()
     {
+
       var boards = new List<Board>
             {
-                new Board{ Id = 1, CreatedAt = DateTime.Now.AddDays(-7), Name = "Board #1" },
-                new Board{ Id = 2, CreatedAt = DateTime.Now.AddDays(-2), Name = "Board #2" },
-                new Board{ Id = 3, CreatedAt = DateTime.Now.AddDays(-1), Name = "Board #3" }
+                new Board{
+                  BoardId = 1, CreatedAt = DateTime.Now.AddDays(-7), Name = "Board #1",
+                    PostIts = new List<PostIt> {
+                              new PostIt{PostId = 1, PostName = "Post #1", CreatedAt = DateTime.Now.AddDays(-7), PostInfo = "This is Post #1" },
+                              new PostIt{PostId = 2, PostName = "Post #2", CreatedAt = DateTime.Now.AddDays(-7), PostInfo = "This is Post #2" },
+                              new PostIt{PostId = 3, PostName = "Post #3", CreatedAt = DateTime.Now.AddDays(-7), PostInfo = "This is Post #3" } 
+                              }
+                         },
+                new Board{
+                  BoardId = 2, CreatedAt = DateTime.Now.AddDays(-6), Name = "Board #2",
+                    PostIts = new List<PostIt> {
+                              new PostIt{PostId = 4, PostName = "Post #4", CreatedAt = DateTime.Now.AddDays(-6), PostInfo = "This is Post #4" },
+                              new PostIt{PostId = 5, PostName = "Post #5", CreatedAt = DateTime.Now.AddDays(-6), PostInfo = "This is Post #5" },
+                              new PostIt{PostId = 6, PostName = "Post #6", CreatedAt = DateTime.Now.AddDays(-6), PostInfo = "This is Post #6" }
+                              }
+                         },
+                new Board{
+                  BoardId = 3, CreatedAt = DateTime.Now.AddDays(-5), Name = "Board #3",
+                    PostIts = new List<PostIt> {
+                              new PostIt{PostId = 7, PostName = "Post #7", CreatedAt = DateTime.Now.AddDays(-5), PostInfo = "This is Post #7" },
+                              new PostIt{PostId = 8, PostName = "Post #8", CreatedAt = DateTime.Now.AddDays(-5), PostInfo = "This is Post #8" },
+                              new PostIt{PostId = 9, PostName = "Post #9", CreatedAt = DateTime.Now.AddDays(-5), PostInfo = "This is Post #9" }
+                              }
+                         }
             };
+      var filePath = Application.Configuration["BoardsDataFile"];
 
-      var json = JsonConvert.SerializeObject(boards);
-
-      var filePath = Application.Configuration["DataFile"];
       if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
       if (File.Exists(filePath)) File.Delete(filePath);
-      File.WriteAllText(filePath, json);
+
+      var boardsJson = JsonConvert.SerializeObject(boards);
+      File.WriteAllText(filePath, boardsJson);
     }
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+  public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
         WebHost.CreateDefaultBuilder(args)
             .UseStartup<Startup>()
             .ConfigureAppConfiguration((context, configBuilder) =>

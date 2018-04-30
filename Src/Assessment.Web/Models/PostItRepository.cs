@@ -9,57 +9,48 @@ namespace Assessment.Web.Models
 {
     public interface IPostItRepository
     {
-    IQueryable<PostIt> GetAllPostIts();
-    PostIt FindPostIt(int id);
-    bool AddPostIt(PostIt postIt);
-    bool DeletePostIt(PostIt postIt); 
+    List<PostIt> GetAllPostIts(int boardId);
+    PostIt FindPostIt(int boardId, int postId);
+    bool AddPostIt(int boardId, PostIt postIt);
+    bool DeletePostIt(int boardId, int postId); 
     }
-
+    
   public class PostItRepository : IPostItRepository
   {
-    private List<PostIt> postIts;
+    BoardRepository boards = new BoardRepository();
 
-    public PostItRepository() => postIts = GetPostItsFromFile();
-
-    // Return deserialized Boards.json data, of type List
-    private List<PostIt> GetPostItsFromFile()
+    // Get all Post Item from the board 
+    public List<PostIt> GetAllPostIts(int boardId)
     {
-      var filePath = Application.Configuration["PostItDataFile"];
-      if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-
-      var json = System.IO.File.ReadAllText(filePath);
-
-      return JsonConvert.DeserializeObject<List<PostIt>>(json);
+      var board = boards.FindBoard(boardId);
+      return board.PostIts;
     }
 
-    // Get all boards with all data from boards List
-    public IQueryable<PostIt> GetAllPostIts()
+    // Get single Post Item data based on it's Id
+    public PostIt FindPostIt(int boardId, int postId)
     {
-      return postIts.AsQueryable();
+      var board = boards.FindBoard(boardId);
+      if(board == null) return null;
+      return (board.PostIts.FirstOrDefault(pItem => pItem.PostId == postId));
     }
 
-    // Get single board data based on it's Id
-    public PostIt FindPostIt(int id)
+    // Add a new PostItem to the PostItems list
+    public bool AddPostIt(int boardId,PostIt postIt)
     {
-      return postIts.FirstOrDefault(x => x.Id == id);
-    }
-
-    // Add a new board to the boards list
-    public bool AddPostIt(PostIt postIt)
-    {
-      if (FindPostIt(postIt.Id) != null) return false;
-
-      postIts.Add(postIt);
-
+      var board = boards.FindBoard(boardId);
+      var postItem = FindPostIt(boardId, postIt.PostId);
+      if (postItem != null) return false;
+      board.PostIts.Add(postIt);
       return true;
     }
 
-    // Delete an existing board from the list
-    public bool DeletePostIt(PostIt postIt)
+    // Delete an existing Post Item from the Boards
+    public bool DeletePostIt(int boardId, int postId)
     {
-      postIt = FindPostIt(postIt.Id);
-      if (postIt == null) return false;
-      return postIts.Remove(postIt);
+      var board = boards.FindBoard(boardId);
+      var postItem = FindPostIt(boardId, postId);
+      if (postItem == null) return false;
+      return board.PostIts.Remove(postItem);
     }
   }
 }

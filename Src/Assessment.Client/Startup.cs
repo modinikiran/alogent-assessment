@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Web;
 
 namespace Assessment
 {
@@ -29,8 +30,8 @@ namespace Assessment
 
             // send same Boards info. to the client all the time.
             services.AddSingleton<IBoardRepository>(new BoardRepository());
-            services.AddSingleton<IPostItRepository>(new PostItRepository());
-    }
+            services.AddSingleton<IPostItRepository, PostItRepository>();
+        }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -43,6 +44,8 @@ namespace Assessment
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseStatusCodePages();
 
             app.UseStaticFiles();
 
