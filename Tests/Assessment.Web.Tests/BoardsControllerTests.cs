@@ -32,7 +32,7 @@ namespace Assessment.Web.Tests
             boardRepo.Verify(x => x.GetAllBoards(), Times.Once);
 
             // assert
-            Assert.IsNotNull(okResult); 
+            Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
         }
 
@@ -66,7 +66,7 @@ namespace Assessment.Web.Tests
         }
 
         // Test case to check success statusif Board item exists
-        [TestCase(3,200)]
+        [TestCase(3, 200)]
         public void FindBoard_ValidId_ReturnOk(int input, int expected)
         {
             var boardRepo = new Mock<IBoardRepository>();
@@ -80,38 +80,38 @@ namespace Assessment.Web.Tests
             boardRepo.Verify(x => x.FindBoard(input), Times.Once);
 
             Assert.IsNotNull(okResult);
-            Assert.AreEqual(expected, okResult.StatusCode);     
+            Assert.AreEqual(expected, okResult.StatusCode);
         }
 
         // Test case to check Success status if Board item is deleted
         [TestCase(3, 200)]
         public void DeleteBoard_ValidId_ReturnOk(int input, int expected)
         {
-        var boardRepo = new Mock<IBoardRepository>();
-        var controller = new BoardsController(boardRepo.Object);
-        boardRepo.Setup(x => x.DeleteBoard(It.IsAny<int>())).Returns(true);
+            var boardRepo = new Mock<IBoardRepository>();
+            var controller = new BoardsController(boardRepo.Object);
+            boardRepo.Setup(x => x.DeleteBoard(It.IsAny<int>())).Returns(true);
 
-        var result = controller.DeleteBoard(input);
-        var okResult = result as OkObjectResult;
+            var result = controller.DeleteBoard(input);
+            var okResult = result as OkObjectResult;
 
-        Assert.IsNotNull(okResult);
-        Assert.AreEqual(expected, okResult.StatusCode);
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(expected, okResult.StatusCode);
         }
 
         // Test case to get Bad request if trying to delete non-existing board Item
         [TestCase(0, 400)]
         public void DeleteBoard_InvalidId_BadRequest(int input, int expected)
         {
-          var boardRepo = new Mock<IBoardRepository>();
-          var controller = new BoardsController(boardRepo.Object);
+            var boardRepo = new Mock<IBoardRepository>();
+            var controller = new BoardsController(boardRepo.Object);
 
-          boardRepo.Setup(x => x.DeleteBoard(It.IsAny<int>())).Returns(true);
+            boardRepo.Setup(x => x.DeleteBoard(It.IsAny<int>())).Returns(true);
 
-          var result = controller.DeleteBoard(input);
-          var badRequest = result as BadRequestObjectResult;
+            var result = controller.DeleteBoard(input);
+            var badRequest = result as BadRequestObjectResult;
 
-          Assert.IsNotNull(badRequest);
-          Assert.AreEqual(expected, badRequest.StatusCode);
+            Assert.IsNotNull(badRequest);
+            Assert.AreEqual(expected, badRequest.StatusCode);
         }
     }
 }
