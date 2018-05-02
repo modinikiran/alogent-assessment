@@ -12,7 +12,7 @@ namespace Assessment.Web.Models
         IQueryable<Board> GetAllBoards();
         Board FindBoard(int id);
         bool AddBoard(Board board);
-        bool DeleteBoard(Board board);
+        bool DeleteBoard(int boardId);
     }
     public class BoardRepository : IBoardRepository
     {
@@ -54,10 +54,12 @@ namespace Assessment.Web.Models
         }
 
         // Delete an existing board from the list
-        public bool DeleteBoard(Board board)
+        public bool DeleteBoard(int boardId)
         {
-            board = FindBoard(board.BoardId);
+           Board board = FindBoard(boardId);
+
             if (board == null) return false;
+            
             return boards.Remove(board);
         }
     }

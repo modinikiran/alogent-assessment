@@ -19,7 +19,7 @@ namespace Assessment.Web.Models
   {
     BoardRepository boards = new BoardRepository();
 
-    // Get all Post Item from the board 
+    // Get all Post Items from the board 
     public List<PostIt> GetAllPostIts(int boardId)
     {
       var board = boards.FindBoard(boardId);

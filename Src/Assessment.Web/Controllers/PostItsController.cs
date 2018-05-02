@@ -23,7 +23,9 @@ namespace Assessment.Web.Controllers
     public IActionResult GetAllPostIts(int boardId)
     {
        var postItems = PostIts.GetAllPostIts(boardId);
+
        if(postItems == null) return NotFound();
+       
        return Ok(postItems);
     } 
 
@@ -31,18 +33,22 @@ namespace Assessment.Web.Controllers
     [HttpGet("{boardId}/PostIts/{postId:int}")]
     public IActionResult FindPostIt(int boardId, int postId)
     {
-      if (postId <= 0) return BadRequest("Please check the Post Item Id");
+      if (postId <= 0 || boardId <= 0) return BadRequest(new { PostItemId = postId, Status = "Please provide valid Post Item Id" });
+
       var postItem = PostIts.FindPostIt(boardId, postId);
-      if(postItem == null) return NotFound("Please check the Post Item Id");
-      return Ok(postItem);
+
+      if(postItem == null) return NotFound(new { PostItemId = postId, Status = "Requested PostIt Item not found" });
+      return Ok(new { PostItem = postItem });
     }
 
 // POST /boards/[board-id]/post-its/
     [HttpPost("{boardId}/PostIts")]
     public IActionResult AddPostIt(int boardId, PostIt value)
     {
-      if (boardId <= 0 || value.PostId <= 0) return BadRequest("Please check the requested Id");
+      if (boardId <= 0 || value.PostId <= 0) return BadRequest(new { BoardId = boardId, PostItemId = value.PostId,Status = "Please provide valid Post Item Id" });
+
       PostIts.AddPostIt(boardId, value);
+
       return Created(new Uri("{boardId}/PostIts", UriKind.Relative), new { PostItem = value.PostId });
     }
 
@@ -50,8 +56,12 @@ namespace Assessment.Web.Controllers
     [HttpDelete("{boardId:int}/PostIts/{postId}")]
     public IActionResult DeletePostIt(int boardId, int postId)
     {
-      if (postId <= 0) return BadRequest();
-      return Ok(PostIts.DeletePostIt(boardId,postId));
+      if (postId <= 0) return BadRequest(new { PostItemId = postId, Status = "Please provide valid Post Item Id" });
+
+      bool postDeleted = PostIts.DeletePostIt(boardId, postId);
+
+      if (postDeleted) return Ok(new { PostItemId = postId, Status = "PostIt Item deleted" });
+      else return BadRequest(new { PostItemId = postId, status = "Board Item does not exist" });
     }
   }
 }

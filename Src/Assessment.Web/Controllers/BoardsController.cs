@@ -20,35 +20,43 @@ namespace Assessment.Web.Controllers
     [HttpGet]
         public IActionResult GetAllBoards()
         {
-        return Ok(boards.GetAllBoards());
+            return Ok(value: boards.GetAllBoards());        
         }
 
     // GET: api/boards/2
-    [HttpGet("{id}")]
-        public IActionResult Find(int id)
+    [HttpGet("{boardId}")]
+        public IActionResult FindBoard(int boardId)
         {
-            if(id <= 0) return BadRequest("Please check the Board Id");
+            if(boardId <= 0) return BadRequest(new {BoardId = boardId, Status = "Please provide valid Board Id" });
 
-            var board = boards.FindBoard(id);
-            if (board == null) return NotFound("Request failed, please check Board Id");
-            return Ok(board);
+            var board = boards.FindBoard(boardId);
+
+            if (board == null) return NotFound(new {BoardId = boardId, Status = "Requested Board Item not found" });
+            return Ok(new {Board = board});
         }
 
-    // Post api/boards/3
+    // Post api/boards/
     [HttpPost]
-        public IActionResult Add(Board value)
+        public IActionResult AddBoard(Board value)
         {
-            boards.AddBoard(value);
-            return Created(new Uri("api/boards", UriKind.Relative), new{BoardId = value.BoardId});
-            // return Created(boards.AddBoard(value));
+            if (value.BoardId <= 0) return BadRequest(new { BoardId = value.BoardId, Status = "Please provide valid Board Id" });
+
+            bool created = boards.AddBoard(board: value);
+
+            if(created) return Created(uri: new Uri(uriString: "api/boards", uriKind: UriKind.Relative), value: new { value.BoardId });
+            else return BadRequest(new { BoardId = value.BoardId, Status = "Board Item already exists" });
         }
 
     // DELETE api/boards/4
-    [HttpDelete]
-        public IActionResult Delete(Board value)
+    [HttpDelete("{boardId}")]
+        public IActionResult DeleteBoard(int boardId)
         {
-            if (value.BoardId <= 0) return BadRequest();
-            return Ok(boards.DeleteBoard(value));
+            if (boardId <= 0) return BadRequest(new { BoardId = boardId, Status = "Please provide valid Board Id" });
+
+            bool boardDeleted = boards.DeleteBoard(boardId);
+            
+            if(boardDeleted) return Ok(new {BoardId = boardId, Status = "Board Item deleted" });
+            else return BadRequest(new {BoardId = boardId, status = "Board Item does not exist" });
         }   
     }
 }
