@@ -4,13 +4,13 @@ using Assessment.Web.Models;
 using Moq;
 using NUnit.Framework;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Assessment.Web.Tests
 {
     [TestFixture]
     class PostItsControllerTests
     {
-
         [Test]
         public void Constructor_CreatesController()
         {
@@ -20,18 +20,15 @@ namespace Assessment.Web.Tests
         }
 
         // Test case to check if all Post Items are retrieved under a Board Item
-        [TestCase(2,200)]
+        [TestCase(1,200)]
         public void GetAllPostIts_WithDataInPostItsRepo_ReturnOk(int boardId, int expected)
         {
-            var boardRepo = new Mock<IBoardRepository>();
-            boardRepo.Setup(x => x.FindBoard(It.IsAny<int>())).Returns(new Board());
-
             var postItRepo = new Mock<IPostItRepository>();
+
+            postItRepo.Setup(x => x.GetAllPostIts(It.IsAny<int>())).Returns( new List<PostIt>());
+
             var controller = new PostItsController(postItRepo.Object);
-
-            postItRepo.Setup(x => x.FindPostIt(It.IsAny<int>(), It.IsAny<int>())).Returns(new PostIt());
-
-            var result = controller.GetAllPostIts(boardId);
+            var result = controller.GetAllPostIts(boardId); 
             var okResult = result as OkObjectResult;
 
             // assert
@@ -72,8 +69,8 @@ namespace Assessment.Web.Tests
         [TestCase(1,2,200)]
         public void FindPostIt_ValidId_ReturnOk(int boardId, int postId, int expected)
         {
-            var boardRepo = new Mock<IBoardRepository>();
-            boardRepo.Setup(x => x.FindBoard(It.IsAny<int>())).Returns(new Board());
+            //var boardRepo = new Mock<IBoardRepository>();
+            //boardRepo.Setup(x => x.FindBoard(It.IsAny<int>())).Returns(new Board());
 
             var postItRepo = new Mock<IPostItRepository>();
             var controller = new PostItsController(postItRepo.Object);
@@ -92,9 +89,9 @@ namespace Assessment.Web.Tests
         public void DeletePostIt_ValidId_ReturnOk(int boardId, int postId, int expected)
         {
         var postItRepo = new Mock<IPostItRepository>();
-        var controller = new PostItsController(postItRepo.Object);
         postItRepo.Setup(x => x.DeletePostIt(It.IsAny<int>(), It.IsAny<int>())).Returns(true);
 
+        var controller = new PostItsController(postItRepo.Object);
         var result = controller.DeletePostIt(boardId, postId);
         var okResult = result as OkObjectResult;
 
@@ -109,7 +106,7 @@ namespace Assessment.Web.Tests
           var postItRepo = new Mock<IPostItRepository>();
           var controller = new PostItsController(postItRepo.Object);
 
-            postItRepo.Setup(x => x.DeletePostIt(It.IsAny<int>(), It.IsAny<int>())).Returns(false);
+            //postItRepo.Setup(x => x.DeletePostIt(It.IsAny<int>(), It.IsAny<int>())).Returns(false);
 
           var result = controller.DeletePostIt(boardId, postId);
           var badRequest = result as BadRequestObjectResult;

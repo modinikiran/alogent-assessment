@@ -29,6 +29,8 @@ namespace Assessment.Web.Tests
             var result = controller.GetAllBoards();
             var okResult = result as OkObjectResult;
 
+            boardRepo.Verify(x => x.GetAllBoards(), Times.Once);
+
             // assert
             Assert.IsNotNull(okResult); 
             Assert.AreEqual(200, okResult.StatusCode);
@@ -48,7 +50,7 @@ namespace Assessment.Web.Tests
             Assert.AreEqual(expected, notFound.StatusCode);
         }
 
-        // Test case to check Bad request(400) status if there's a client error
+        // Test case to check Bad request(400) status when requested for a board
         [TestCase(0, 400)]
         [TestCase(-1, 400)]
         public void FindBoard_IdLessThanOne_ReturnBadRequest(int input, int expected)
@@ -74,6 +76,8 @@ namespace Assessment.Web.Tests
 
             var result = controller.FindBoard(input);
             var okResult = result as OkObjectResult;
+
+            boardRepo.Verify(x => x.FindBoard(input), Times.Once);
 
             Assert.IsNotNull(okResult);
             Assert.AreEqual(expected, okResult.StatusCode);     
